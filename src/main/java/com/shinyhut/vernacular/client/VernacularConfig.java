@@ -27,6 +27,7 @@ public class VernacularConfig {
     private boolean enableRreEncoding = true;
     private boolean enableHextileEncoding = true;
     private boolean enableZLibEncoding = false;
+    private boolean serverPreference = false;
 
     public Supplier<String> getUsernameSupplier() {
         return usernameSupplier;
@@ -241,4 +242,22 @@ public class VernacularConfig {
     public void setEnableZLibEncoding(boolean enableZLibEncoding) {
         this.enableZLibEncoding = enableZLibEncoding;
     }
+
+
+    public boolean isServerPreference() {
+        return serverPreference;
+    }
+
+    /**
+     * Specifies whether we should use the pixel format from the remote server. It is exchanged during the initialization
+     * <p>
+     * If this is set to false, client uses a defined ColorDepth option
+     * <p>
+     *
+     * @param serverPreference Should we use the pixel format from the remote server.
+     */
+    public void setServerPreference(boolean serverPreference) {
+        this.serverPreference = serverPreference;
+    }
+
 }
