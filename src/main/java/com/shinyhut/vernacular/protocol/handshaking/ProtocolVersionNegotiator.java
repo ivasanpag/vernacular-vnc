@@ -18,21 +18,13 @@ public class ProtocolVersionNegotiator {
     public void negotiate(VncSession session) throws IOException, VncException {
         ProtocolVersion serverVersion = ProtocolVersion.decode(session.getInputStream());
 
-        if (!serverVersion.atLeast(MAJOR_VERSION, MIN_MINOR_VERSION)) {
-            throw new UnsupportedProtocolVersionException(
-                    serverVersion.getMajor(),
-                    serverVersion.getMinor(),
-                    MAJOR_VERSION,
-                    MIN_MINOR_VERSION
-            );
-        }
-
-        ProtocolVersion clientVersion = new ProtocolVersion(
-                MAJOR_VERSION,
-                min(serverVersion.getMinor(), MAX_MINOR_VERSION)
-        );
+        // If protocol is > 3.8, it is a proprietary protocol. We will use with 3.8
+        ProtocolVersion clientVersion = !serverVersion.atLeast(MAJOR_VERSION, MIN_MINOR_VERSION) ?
+                new ProtocolVersion(MAJOR_VERSION,MAX_MINOR_VERSION) :
+                new ProtocolVersion(MAJOR_VERSION,min(serverVersion.getMinor(), MAX_MINOR_VERSION));
 
         session.setProtocolVersion(clientVersion);
         clientVersion.encode(session.getOutputStream());
     }
+
 }
